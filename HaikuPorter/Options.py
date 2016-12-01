@@ -113,7 +113,7 @@ def parseOptions():
 	parser.add_option('--get-dependencies',
 					  action='store_true', dest='getDependencies', default=False,
 					  help="install all needed dependencies, then build the port")
-	parser.add_option('--no-source-packages',
+	parser.add_option('-n', '--no-source-packages',
 					  action='store_true', dest='noSourcePackages',
 					  default=False,
 					  help="don't create any source packages")
