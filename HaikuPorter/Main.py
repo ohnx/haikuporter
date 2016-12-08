@@ -70,7 +70,7 @@ class Main(object):
 
 		# determine if haikuporter has just been invoked for a short-term
 		# command
-		self.shallowInitIsEnough = (self.options.lint or self.options.tree
+		self.shallowInitIsEnough = (self.options.lint or self.options.lintpo or self.options.tree
 									or self.options.get or self.options.list
 									or self.options.portsForFiles
 									or self.options.listPackages
@@ -110,16 +110,16 @@ class Main(object):
 			return
 
 		# if requested, scan the ports tree for problems
-		if self.options.lint:
+		if self.options.lint or self.options.lintpo:
 			if (not buildPlatform.isHaiku
 				and Configuration.getLicensesDirectory() == None):
 				sysExit('LICENSES_DIRECTORY must be set in configuration on '
 					'this build platform!')
 			self._createRepositoryIfNeeded(True)
 			if not args:
-				self._checkSourceTree("")
+				self._checkSourceTree("", self.options.lintpo)
 			else:
-				self._checkSourceTree(args[0])
+				self._checkSourceTree(args[0], self.options.lintpo)
 			return
 
 		# if requested, list all ports in the HaikuPorts tree
@@ -737,7 +737,7 @@ class Main(object):
 				hierarchy.append([item, subdirList])
 		return None
 
-	def _checkSourceTree(self, portArgument):
+	def _checkSourceTree(self, portArgument, problemsOnly):
 		if portArgument:
 			print 'Checking ports of: ' + portArgument
 
@@ -777,7 +777,8 @@ class Main(object):
 				for version in portVersionsByName[portName]:
 					portID = portName + '-' + version
 					port = allPorts[portID]
-					print '%s	[%s]' % (portID, port.category)
+					if not problemsOnly:
+						print '%s	[%s]' % (portID, port.category)
 					try:
 						port.validateRecipeFile(True)
 					except SystemExit as e:

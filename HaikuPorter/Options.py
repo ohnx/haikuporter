@@ -178,7 +178,13 @@ def parseOptions():
 						   "tree")
 	parser.add_option('--lint',
 					  action='store_true', dest='lint', default=False,
-					  help="scan the ports tree for problems")
+					  help="scan the ports tree for problems, displaying all "
+						   "packages regardless of if they have problems")
+
+	parser.add_option('--lint-problems-only',
+					  action='store_true', dest='lintpo', default=False,
+					  help="scan the ports tree for problems, diplaying only "
+						   "the packages that have problems")
 
 	parser.add_option('--config',
 					  action='store', type='string', dest='configFile',
